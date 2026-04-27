@@ -1,0 +1,12 @@
+.ipynb_checkpoints/
+*.py[cod]
+*$py.class
+.DS_Store
+venv/
+env/
+.venv/
+.env/
+build/
+dist/
+*.egg-info/
+

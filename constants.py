@@ -1,4 +1,7 @@
 # constants 
+Rsun = 6.957e+10
+Msun = 1.989e+33
+Lsun = 3.828e33 
 
 G = 6.67e-8 
 k = 1.38e-16

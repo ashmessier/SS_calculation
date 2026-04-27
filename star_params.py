@@ -1,6 +1,4 @@
-Rsun = 6.957e+10
-Msun = 1.989e+33
-Lsun = 3.828e33 
+from constants import Rsun, Msun, Lsun 
 
 solar_masses = input("Input desired star mass in solar masses: ")
 
