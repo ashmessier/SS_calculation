@@ -28,7 +28,10 @@ def plot_sol(results):
 
 
 print(f"Calculating structure for star of mass {solar_masses} solar masses")
-print("")
+print(f"Initial total radius guess: {params0[3]:.4g}")
+print(f"Initial surface luminosity guess: {params0[2]:.4g}")
+print(f"Initial core temperature guess: {params0[1]:.4g}")
+print(f"Initial core pressure guess: {params0[0]:.4g}")
 
 results = fsolve(difference, x0 = params0, full_output=True)
 
@@ -44,11 +47,11 @@ else:
     
     # make plot directory 
     try:
-        os.mkdir(f"plots_{Ms:.2g}")
-        print(f"Created directory /plots_{Ms:.2g}")
+        os.mkdir(f"plots_{solar_masses}")
+        print(f"Created directory /plots_{solar_masses}")
         print("")
     except FileExistsError:
-        print(f"Directory plots_{Ms:.2g} already exists")
+        print(f"Directory plots_{solar_masses} already exists")
         print("")
 
     
@@ -86,9 +89,9 @@ else:
         
     axes[0].legend(frameon=True)
     fig.tight_layout()
-    plt.savefig(f"plots_{Ms:.2g}/mass_temp_press_lum_4panel.png")
+    plt.savefig(f"plots_{solar_masses}/mass_temp_press_lum_4panel.png")
 
-    print(f"Four panel plot saved to 'plots_{Ms:.2g}/mass_temp_press_lum_4panel.png'")
+    print(f"Four panel plot saved to 'plots_{solar_masses}/mass_temp_press_lum_4panel.png'")
     print("")
     
     
@@ -163,8 +166,74 @@ else:
     axes.set_xlabel("Mass (g)")
     axes.set_ylabel("Normalized parameter")
     #plt.ylim(1e-3, 1e2)
-    plt.savefig(f"plots_{Ms:.2g}/mass_temp_press_lum_one.png")
+    plt.savefig(f"plots_{solar_masses}/mass_temp_press_lum_one.png")
     
-    print(f"Normalized parameter plot saved to 'plots_{Ms:.2g}/mass_temp_press_lum_one.png'")
+    print(f"Normalized parameter plot saved to 'plots_{solar_masses}/mass_temp_press_lum_one.png'")
 
+
+    # calculate columns for machine readable table 
+        
+    mass_arr = np.concatenate((plot_dict["m_in"], plot_dict["m_out"][::-1]))
+    lum_arr =  np.concatenate((plot_dict["params_in"]["lum"], plot_dict["params_out"]["lum"][::-1]))
+    temp_arr = np.concatenate((plot_dict["params_in"]["temp"], plot_dict["params_out"]["temp"][::-1]))
+    pressure_arr = np.concatenate((plot_dict["params_in"]["pressure"], plot_dict["params_out"]["pressure"][::-1]))
+    radius_arr = np.concatenate((plot_dict["params_in"]["radius"], plot_dict["params_out"]["radius"][::-1]))
     
+    X, Y, Z = comp
+    
+    # calc density 
+    rho_arr = rho_eq(pressure_arr, temp_arr, comp)
+    
+    # calc energy gen rate
+    energy_gen_arr = e_CNO(X, Y, Z, rho_arr, temp_arr) + e_PP(X, Y, Z, rho_arr, temp_arr)
+    
+    # calc radiative vs convective 
+    rad_conv_arr = []
+    for (m, T, P, L) in zip(mass_arr, temp_arr, pressure_arr, lum_arr):
+        rad_conv_arr.append(check_nabla(comp, m, T, P, L, return_conv_rad = True))
+    
+    # find turning points 
+    turning_masses = []
+    for i, (mass, state) in enumerate(zip(mass_arr[:-1], rad_conv_arr[:-1])):
+        if rad_conv_arr[i+1] != state: 
+            turning_masses.append(mass)
+            
+    # calc opacity
+    opacity_arr = []
+    for T, rho in zip(temp_arr, rho_arr):
+        logT = np.log10(T)
+        logrho = np.log10(rho)
+        opacity_arr.append(calc_k(logT, logrho))
+    
+    # calc adiabatic temp gradient 
+    nabla_abd_arr = np.ones_like(temp_arr) * 0.4
+    
+    # calc stellar gradient dlnT/dlnP
+    stellar_gradient_arr = []
+    for (m, T, P, L) in zip(mass_arr, temp_arr, pressure_arr, lum_arr):
+        stellar_gradient_arr.append(check_nabla(comp, m, T, P, L, return_conv_rad = False))
+    
+    #make a table of them all
+    table_starparams = {"Mass":mass_arr, 
+                       "Luminosity": lum_arr, 
+                       "Temperature": temp_arr, 
+                       "Pressure": pressure_arr, 
+                       "Radius": radius_arr, 
+                       "Density": rho_arr, 
+                       "e": energy_gen_arr, 
+                       "Energy Transport": rad_conv_arr, 
+                       "Opacity": opacity_arr, 
+                       "Adiabatic Temperature Gradient": nabla_abd_arr, 
+                       "Stellar Gradient": stellar_gradient_arr}
+    
+    txt_file = f"plots_{solar_masses}/star_tab_{solar_masses}Msun.txt"
+    
+    # Convert to DataFrame
+    df_starparams = pd.DataFrame(table_starparams)
+    
+    # Save to a text file
+    with open(txt_file, 'w') as f:
+        # to_string() keeps it as a readable table
+        f.write(df_starparams.to_string(index=False))
+
+    print(f"Saved table of star parameters to 'plots_{solar_masses}/star_tab_{solar_masses}Msun.txt'")

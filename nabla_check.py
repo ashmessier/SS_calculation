@@ -9,7 +9,7 @@ from energies import e_CNO, e_PP
 def check_nabla(comp, m, T, P, L, return_conv_rad = False):
    # print("nabla for T:", T)
     X, Y, Z = comp
-    nabla_ad = 0.4
+    nabla_ad = 0.4 # better way to do this? 
 
     rho = rho_eq(P, T, comp) #calculate central density
     

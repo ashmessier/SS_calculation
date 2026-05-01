@@ -14,6 +14,18 @@ star_comp_table = "star_comp_key.txt" # get edited table w indices
 star_comp_csv = pd.read_csv(star_comp_table, delimiter=" ") # read in 
 
 def get_table_number(X, Y, Z): 
+    
+    """
+    Finds index of opacity table in file star_comp_key.txt with the composition given by the input X, Y, Z values. 
+    Inputs: 
+    X (string): hydrogen mass fraction 
+    Y (string): helium mass fraction 
+    Z (string): metal mass fraction 
+
+    returns:
+    (int) index of key in "opacities_hw2.txt" file with the provided composition 
+    """
+    
     X_filt = star_comp_csv[star_comp_csv['x_val'] == "X="+X] 
     Y_filt = X_filt[X_filt['y_val'] == "Y="+Y]
     
@@ -42,6 +54,16 @@ with open(tables_file, 'r') as file: # go through all lines in big csv
         tab_indxs[int(table)] = (tab_start_val, tab_end_val)
         
 def get_table(table_indx):
+    """
+    Loads in table from index number output from get_table_number. 
+    
+    Inputs: 
+    table_index (int): number between 1 - 128 corresponding to the desired opacity table from the 'opacites_hw2.txt' file
+
+    returns: 
+    
+    
+    """
     final_k_table = pd.read_csv(tables_file, 
         skiprows=tab_indxs[table_indx][0], 
         skipfooter=int(9576-tab_indxs[table_indx][1]-1),

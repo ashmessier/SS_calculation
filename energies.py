@@ -2,6 +2,20 @@ import numpy as np
 from constants import *
 
 def e_CNO(X, Y, Z, rho, T): 
+    """
+    Calculates the energy generation rate from the CNO cycle given a composition, density, and temperature using approximations in Stellar Structures and Evolution (Kippenhahn). All parameters in cgs units. 
+    Inputs: 
+    X (float): hydrogen mass fraction
+    Y (float): helium mass fraction
+    Z (float): metal mass fraction 
+    rho (float): density
+    T (float): temperature 
+
+    returns: 
+    ecno (float): energy generation rate from the CNO cycle 
+
+    """
+    
     T9 = T/1e9
     Xcno = Z # can i do this 
     g141 = (1-2.99*T9 + 3.41*T9**2 - 2.43*T9**3)
@@ -10,6 +24,21 @@ def e_CNO(X, Y, Z, rho, T):
     return ecno
 
 def e_PP(X, Y, Z, rho, T):
+
+    """
+    Calculates the energy generation rate from the pp chain given a composition, density, and temperature using approximations in Stellar Structures and Evolution (Kippenhahn). All parameters in cgs units. 
+    Inputs: 
+    X (float): hydrogen mass fraction
+    Y (float): helium mass fraction
+    Z (float): metal mass fraction 
+    rho (float): density
+    T (float): temperature 
+
+    returns: 
+    e_PP (float): energy generation rate from the pp chain 
+
+    """
+    
     psi = 1
     T7=T/1e7
     T9 = T/1e9
