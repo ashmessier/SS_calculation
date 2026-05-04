@@ -6,7 +6,7 @@ from derivs import *
 from constants import *
 from nabla_check import *
 from integrate_difference import * 
-from star_params import * #params0, Ms, M_intersect
+from star_params import * 
 
 import os
 import numpy as np

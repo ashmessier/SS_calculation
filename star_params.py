@@ -7,9 +7,9 @@ M_core_init = 1e10
 M_intersect = 0.2 * Ms
 niter = int(1e3)
 
-Rs_guess = Rsun*(float(solar_masses)**(0.75)) #* 1.67 # do scaling relations 
+Rs_guess = Rsun*(float(solar_masses)**(0.75)) 
 Pc_guess = 1.5e17 
-Ls_guess = Lsun * (float(solar_masses)**(3.5))  #* 15.33 # scaling relations 
+Ls_guess = Lsun * (float(solar_masses)**(3.5)) 
 Tc_guess = 2e7 
 
 comp = (0.70, 0.28, 0.02)

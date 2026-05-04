@@ -1,7 +1,7 @@
 from load1load2 import * 
 from scipy.integrate import solve_ivp
 import numpy as np
-from star_params import * #params0, Ms, M_intersect
+from star_params import *
 from derivs import * 
 
 
@@ -16,6 +16,9 @@ def int_load1_outwards(Rs, Pc, Ls, Tc):
     Pc (float): Pressure at the core of the star 
     Ls (float): Luminosity at the surface of the star (does not reference) 
     Tc (float): Temperature at the core of the star 
+
+    returns:
+    sol_outwarrds (list): list of [Rc, Pc, Lc, Tc]; core values 
     """
         
     params = load1(M_core_init, comp, Pc, Tc) # uses load1 to call initial core conditions 
@@ -36,7 +39,7 @@ def int_load2_inwards(Rs, Pc, Ls, Tc):
     Tc (float): Temperature at the core of the star (does not reference) 
 
     returns:
-    
+    sol_inwards (list): list of [Rs, Ps, Ls, Ts]; surface values 
     """
 
     params = load2(Ms, comp, Ls, Rs) 

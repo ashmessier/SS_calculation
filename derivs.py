@@ -2,7 +2,7 @@ import numpy as np
 from rho import * 
 from energies import * 
 from constants import *
-from star_params import * #params0, Ms, M_intersect
+from star_params import * 
 from nabla_check import check_nabla
 
 def dPdMr_eq(Mr, r):

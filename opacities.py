@@ -34,7 +34,7 @@ def get_table_number(X, Y, Z):
     else: 
         return int(Y_filt["number"].iloc[0]) # else just return the vals filtered on X and Y 
         
-table_indx = get_table_number('0.7000', '0.2800', '0.0000') # specified vals from class 
+table_indx = get_table_number('0.7000', '0.2800', '0.0000') # solar comp
 
 tables_file = '/Users/asmessier/Desktop/JHU/Spring2026/stars/stellar_structure_calc/opacites_hw2.txt'
 
