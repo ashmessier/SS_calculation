@@ -34,6 +34,9 @@ def int_load2_inwards(Rs, Pc, Ls, Tc):
     Pc (float): Pressure at the core of the star (does not reference)
     Ls (float): Luminosity at the surface of the star
     Tc (float): Temperature at the core of the star (does not reference) 
+
+    returns:
+    
     """
 
     params = load2(Ms, comp, Ls, Rs) 

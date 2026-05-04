@@ -187,8 +187,6 @@ else:
 
     print(f"Saved table of star parameters to 'plots_{solar_masses}/star_tab_{solar_masses}Msun.txt'")
 
-
-    
     
     
     # plot normalized parameters 
