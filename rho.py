@@ -16,10 +16,11 @@ def rho_eq(P, T, comp):
     """
     
     X, Y, Z = comp 
-    mu = 4/(3+5*X-Z)
+    mu = 4/(3+5*X-Z) # calculates mean molecular weight from composition 
 
+    # calclualtes pressure contribution from radiation
     rad_pressure = (a * T**4)/3
-    rho = (mu * (P-rad_pressure))/(Na * k * T)
+    rho = (mu * (P-rad_pressure))/(Na * k * T) # total density 
 
     
     return rho 

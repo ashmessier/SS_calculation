@@ -17,7 +17,7 @@ def e_CNO(X, Y, Z, rho, T):
     """
     
     T9 = T/1e9
-    Xcno = Z # can i do this 
+    Xcno = Z # approximate CNO fraction as total metallicity of star 
     g141 = (1-2.99*T9 + 3.41*T9**2 - 2.43*T9**3)
     ecno = 8.24e25 * g141 * Xcno * X * rho * T9**(-2/3) * np.exp(-15.231*T9**(-1/3) - (T9/0.8)**2)
 
@@ -42,7 +42,8 @@ def e_PP(X, Y, Z, rho, T):
     psi = 1
     T7=T/1e7
     T9 = T/1e9
-    
+
+    # handling for an input array of T values
     if not isinstance(T, float):
         epp_arr = []
         for T7_val, T9_val, rho_val in zip(T7, T9, rho): 
@@ -60,6 +61,7 @@ def e_PP(X, Y, Z, rho, T):
             epp_arr.append(epp)
             return epp_arr
 
+    # handling for T as a float 
     else: 
         if 1.8 <= T7 <= 2.2:  # values in book (roughly, might update later) 
             psi = 2

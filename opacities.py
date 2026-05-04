@@ -7,7 +7,6 @@ from scipy.optimize import fsolve
 from scipy.integrate import solve_ivp
 from constants import *
 
-
 # opacities
 star_comp_table = "star_comp_key.txt" # get edited table w indices 
 
@@ -41,7 +40,7 @@ tables_file = '/Users/asmessier/Desktop/JHU/Spring2026/stars/stellar_structure_c
 
 tab_indxs = {} # initialize dict for table row lines 
 
-with open(tables_file, 'r') as file: # go through all lines in big csv 
+with open(tables_file, 'r') as file: # go through all lines in csv 
     table, tab_start_val, tab_end_val = [0, 0, 0]
     for i, line in enumerate(file): 
         if "TABLE" in line:
@@ -60,9 +59,7 @@ def get_table(table_indx):
     Inputs: 
     table_index (int): number between 1 - 128 corresponding to the desired opacity table from the 'opacites_hw2.txt' file
 
-    returns: 
-    
-    
+    returns (pd.DataFrame): pandas table of opacities corresponding to the index specified by the input 
     """
     final_k_table = pd.read_csv(tables_file, 
         skiprows=tab_indxs[table_indx][0], 
@@ -78,7 +75,7 @@ logR_coords = [float(val) for val in final_k_table.columns.tolist()[1:]] # gets 
 
 final_vals = final_k_table.drop(columns=final_k_table.columns[:1]) # do this to get header 
 
-new_header = final_vals.iloc[1] #grab the first column of final vals 
+new_header = final_vals.iloc[1] #get the first column of final vals 
 final_vals = final_vals[0:] #take the entire data minus the header row
 final_vals.columns = new_header #set the header row as the df header
 vals_arr = final_vals.to_numpy() # convert to array 
@@ -86,7 +83,7 @@ vals_arr = final_vals.to_numpy() # convert to array
 interpolator = RegularGridInterpolator((logT_coords, 
                         logR_coords), vals_arr, method='linear') # make interpolator object 
 
-def calc_k(logT, logrho): # use relation in doccument 
+def calc_k(logT, logrho): 
     """
     The logarithm of the Rosseland mean opacity [cm**2/g] as a function
     of log(T) for columns of constant log(R), where
@@ -102,8 +99,6 @@ def calc_k(logT, logrho): # use relation in doccument
     R = rho / (T*1e-6)**3 # calc R from T and rho 
     logR = np.log10(R) # take log of R 
     
-  #  print(f"Calculating opacity for logR = {logR:.2f}; logT = {logT:.2f}")
-
     # make sure vals for T and R are in range of table 
     if not (3.75 <= logT <= 7.5): 
         raise Warning("Log(T) out of bounds, adjust T")
@@ -112,6 +107,5 @@ def calc_k(logT, logrho): # use relation in doccument
         raise Warning("Log(R) out of bounds, adjust rho")
      
     interpolated_k = interpolator([logT, logR]) 
-   # print(float(10**interpolated_k[0]))
     return float(10**interpolated_k[0])
     
