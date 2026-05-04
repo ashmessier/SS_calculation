@@ -44,12 +44,16 @@ def plot_sol(results):
 
 
 print(f"Calculating structure for star of mass {solar_masses} solar masses")
+print("")
 print(f"Initial total radius guess: {params0[3]:.4g}")
 print(f"Initial surface luminosity guess: {params0[2]:.4g}")
 print(f"Initial core temperature guess: {params0[1]:.4g}")
 print(f"Initial core pressure guess: {params0[0]:.4g}")
+print("")
 
 # runs fsolve on differene function with initial guesses params0
+print(f"Solving structure of star of {solar_masses} solar masses...")
+print("")
 results = fsolve(difference, x0 = params0, full_output=True)
 
 # check if the solution has converged or not 
