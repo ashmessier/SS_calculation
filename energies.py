@@ -47,9 +47,11 @@ def e_PP(X, Y, Z, rho, T):
     if not isinstance(T, float):
         epp_arr = []
         for T7_val, T9_val, rho_val in zip(T7, T9, rho): 
+            if T7_val < 1.8: 
+                psi = 1
             if 1.8 <= T7_val <= 2.2:  # values in book (roughly, might update later) 
                 psi = 2
-            elif T7_val >= 2.2:
+            if T7_val > 2.2:
                 psi = 1.5
     
             Z1, Z2 = 1, 1
